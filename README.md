@@ -8,6 +8,8 @@ Used React, Styled Components + Zora SDK (ZDK)
 
 Running on Rinkeby.
 
+[Figma File](https://www.figma.com/file/46hrLoGcMKJGqsyjQccjnE/ETHCC-Hackathon?node-id=8%3A21)
+
 ## Features
 - Mint NFT on Rinkeby
 - Create Auction
