@@ -10,6 +10,9 @@ Running on Rinkeby.
 
 [Figma File](https://www.figma.com/file/46hrLoGcMKJGqsyjQccjnE/ETHCC-Hackathon?node-id=8%3A21)
 
+[Demo](https://pedantic-bhaskara-2ee7ea.netlify.app)
+
+
 ## Features
 - Mint NFT on Rinkeby
 - Create Auction
