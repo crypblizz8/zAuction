@@ -5,13 +5,8 @@ import { Link, useHistory, useRouteMatch } from "react-router-dom";
 
 const PendingContent = ({ data }) => {
     
-    // const history = useHistory();
     const testURL = 'media'
     const { url, path } = useRouteMatch()
-
-    // function mediaNavigation() {
-    //     history.push("/media");
-    // }
 
     const frontCard = () => {
         return (
