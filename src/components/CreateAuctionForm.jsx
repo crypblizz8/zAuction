@@ -1,28 +1,92 @@
-import {  } from "@zoralabs/zdk";
+import { useCallback, useRef } from "react";
 import { MintButton } from "../styles/header";
 import { useZora } from "../utils/ZoraProvider";
+import { InputField, MintForm } from "../styles/form";
 
 function CreateAuctionForm() {
-    const { zora, address, auctionHouse } = useZora();
+  const { zora, auctionHouse } = useZora();
 
-    const createAuction = async () => {
+  // Form Refs
+  const tokenRef = useRef();
+  const curatorRef = useRef();
+  const durationRef = useRef();
+  const royaltiesRef = useRef();
+  const priceRef = useRef();
 
-        const approvalTx = await zora.approve(auctionHouse.auctionHouse.address, 3498)
-        const txWait = await approvalTx.wait()
-        console.log('approvalTx txWait', txWait);
+  const handleFormSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      try {
+        const token = tokenRef.current.value;
+        const curator = curatorRef.current.value;
+        const duration = durationRef.current.value;
+        const royalties = royaltiesRef.current.value;
+        const price = priceRef.current.value;
 
-        const createAuctionTx = await auctionHouse.createAuction(3498, 10000, 100, '0x32F570BDEE7dD09F90f4b82185563109F0452be0', 10, "0x0000000000000000000000000000000000000000")
+        console.log("handleForm tolen", token);
+        console.log("handleForm curator", curator);
+        console.log("handleForm duration", duration);
+        console.log("handleForm royalties", royalties);
+        console.log("handleForm price", price);
+
+        const approvalTx = await zora.approve(
+          auctionHouse.auctionHouse.address,
+          token
+        );
+        const txWait = await approvalTx.wait();
+        console.log("approvalTx txWait", txWait);
+
+        const createAuctionTx = await auctionHouse.createAuction(
+          token,
+          duration,
+          price,
+          curator,
+          royalties,
+          "0x0000000000000000000000000000000000000000"
+        );
         const receipt = await createAuctionTx.wait();
-        const auction = await auctionHouse.fetchAuctionFromTransactionReceipt(receipt);
-        console.log('auctionReceipt auction', auction);
+        const auction = await auctionHouse.fetchAuctionFromTransactionReceipt(
+          receipt
+        );
+        console.log("auctionReceipt auction", auction);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [zora, auctionHouse]
+  );
 
-    }
-
-    return (
-        <div style={{flex:1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:16}}>
-            <MintButton style={{ width: 150 }} onClick={createAuction}> Create </MintButton>
-        </div>
-    )
+  return (
+    <div
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 16,
+      }}
+    >
+      <MintForm onSubmit={handleFormSubmit}>
+        <InputField defaultValue="" placeholder="Token ID" ref={tokenRef} />
+        <InputField
+          defaultValue=""
+          placeholder="Curator Address"
+          ref={curatorRef}
+        />
+        <InputField
+          defaultValue=""
+          placeholder="Royalty Split"
+          ref={royaltiesRef}
+        />
+        <InputField defaultValue="" placeholder="Duration" ref={durationRef} />
+        <InputField defaultValue="" placeholder="Bid" ref={priceRef} />
+        <MintButton style={{ width: 150 }} onSubmit={() => handleFormSubmit()}>
+          {" "}
+          Create{" "}
+        </MintButton>
+      </MintForm>
+    </div>
+  );
 }
-    
+
 export default CreateAuctionForm;
